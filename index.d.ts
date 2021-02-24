@@ -1,26 +1,31 @@
-import {AxiosInterceptorManager, AxiosRequestConfig} from "axios";
+import { AxiosInterceptorManager, AxiosRequestConfig } from 'axios'
 
 export interface RequestConfig {
-    baseURL?: string;
-    timeout?: number;
-    headers?: object;
-    enabledCORS?: boolean;
-    onThrowErrorFn?: () => object;
-    responseWrap?: {
-        dataKey?: string,
-        statusKey?: string,
-        fn: ((instance) => object) | null,
-    },
-    afterInitFn?: () => object;
+  baseURL?: string;
+  timeout?: number;
+  headers?: object;
+  enabledCORS?: boolean;
+  onThrowErrorFn?: () => object;
+  responseWrap?: {
+    dataKey?: string,
+    statusKey?: string,
+    fn: ((instance) => object) | null,
+  },
+  afterInitFn?: () => object;
 }
 
 
 export interface Request {
-    config: RequestConfig;
+  config: RequestConfig;
 
-    registerRequestInterceptors(source: [])
+  registerRequestInterceptors(source: [])
 
-    registerResponseInterceptors(source: [])
+  registerResponseInterceptors(source: [])
 
-    registerInterceptors(source: [], target: AxiosInterceptorManager<AxiosRequestConfig>)
+  registerInterceptors(source: [], target: AxiosInterceptorManager<AxiosRequestConfig>)
 }
+
+
+declare const request: (RequestConfig) => Request
+
+export default request

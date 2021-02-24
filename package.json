@@ -14,10 +14,6 @@
     "prettier": "prettier --write src/**/*"
   },
   "devDependencies": {
-  },
-  "dependencies": {
-    "axios": "^0.21.1",
-    "@feugene/mu": "^2.20.0",
     "eslint": "7.20.0",
     "eslint-config-prettier": "^8.0.0",
     "eslint-plugin-import": "^2.22.1",
@@ -25,6 +21,10 @@
     "eslint-plugin-sonarjs": "^0.6.0",
     "eslint-plugin-unicorn": "^28.0.2",
     "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "@feugene/mu": "^2.20.0"
   },
   "typings": "./index.d.ts"
 }

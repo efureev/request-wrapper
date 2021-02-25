@@ -4,8 +4,9 @@ import { isFunction } from '@feugene/mu/src/is'
 
 const WrapperInterceptor = options => [
   response => {
-    new ResponseWrapper(response, {
-      dataKey: this.config.responseWrap.dataKey,
+    return new ResponseWrapper(response, {
+      dataKey: options.responseWrap.dataKey,
+      statusKey: options.responseWrap.statusKey,
     })
   },
 
@@ -16,8 +17,8 @@ const WrapperInterceptor = options => [
       return Promise.reject(makeError(error))
     }
 
-    if (!error.response && isFunction(this.config.onThrowErrorFn)) {
-      return this.config.onThrowErrorFn(error, this)
+    if (!error.response && isFunction(options.onThrowErrorFn)) {
+      return options.onThrowErrorFn(error, this)
       // @todo create none http error
       // return Promise.reject(makeError(error))
     }

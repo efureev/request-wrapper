@@ -6,7 +6,7 @@ const request = (config = {}) => {
     dataKey: 'data',
     statusKey: 'status',
     fn: (instance) => {
-      instance.registerResponseInterceptors([WrapperInterceptor])
+      instance.registerResponseInterceptors(WrapperInterceptor)
     },
   }
 

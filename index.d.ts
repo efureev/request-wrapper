@@ -18,11 +18,11 @@ export interface RequestConfig {
 export interface Request {
   config: RequestConfig;
 
-  registerRequestInterceptors(source: [])
+  registerRequestInterceptors(...source: [(config: RequestConfig) => object])
 
-  registerResponseInterceptors(source: [])
+  registerResponseInterceptors(...source: [(config: RequestConfig) => object])
 
-  registerInterceptors(source: [], target: AxiosInterceptorManager<AxiosRequestConfig>)
+  registerInterceptors(target: AxiosInterceptorManager<AxiosRequestConfig>, ...source: [() => object])
 }
 
 

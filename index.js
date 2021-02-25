@@ -2,8 +2,12 @@ import Request from './src/Request'
 import WrapperInterceptor from './src/interceptors/response/WrapperInterceptor'
 
 const request = (config = {}) => {
-  config.responseWrap.fn = (instance) => {
-    instance.registerResponseInterceptors(WrapperInterceptor)
+  config.responseWrap = {
+    dataKey: 'data',
+    statusKey: 'status',
+    fn: (instance) => {
+      instance.registerResponseInterceptors([WrapperInterceptor])
+    },
   }
 
   return new Request(config)

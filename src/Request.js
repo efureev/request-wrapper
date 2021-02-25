@@ -45,20 +45,20 @@ export default class Request {
   }
 
   /**
-   * @param {[]} source
    * @param target
+   * @param source
    */
-  registerInterceptors(source, target) {
+  registerInterceptors(target, ...source) {
     source.forEach(callback => {
       target.use(...this.normalizeInterceptors(callback))
     })
   }
 
-  registerRequestInterceptors(source) {
-    this.registerInterceptors(source, this.axios.interceptors.request)
+  registerRequestInterceptors(...source) {
+    this.registerInterceptors(this.axios.interceptors.request, ...source)
   }
 
-  registerResponseInterceptors(source) {
-    this.registerInterceptors(source, this.axios.interceptors.response)
+  registerResponseInterceptors(...source) {
+    this.registerInterceptors(this.axios.interceptors.response, ...source)
   }
 }

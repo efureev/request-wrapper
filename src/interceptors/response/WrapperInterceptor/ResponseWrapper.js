@@ -43,7 +43,11 @@ export default class ResponseWrapper {
       this.type = 'blob'
     } else {
       this.datas.data = data
-      this.type = 'mixed'
+      if (isEmpty(this.options.dataKey)) {
+        this.type = 'content'
+      } else {
+        this.type = 'mixed'
+      }
     }
 
     return this

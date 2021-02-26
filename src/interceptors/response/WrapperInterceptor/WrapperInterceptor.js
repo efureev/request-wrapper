@@ -5,8 +5,8 @@ import { isFunction } from '@feugene/mu/src/is'
 const WrapperInterceptor = options => [
   response => {
     return new ResponseWrapper(response, {
-      dataKey: options.responseWrap.dataKey,
-      statusKey: options.responseWrap.statusKey,
+      dataKey: options.responseWrapper.dataKey,
+      statusKey: options.responseWrapper.statusKey,
     })
   },
 

@@ -5,11 +5,12 @@ const defaultConfig = {
   headers: {},
   onThrowErrorFn: null, // (error, instance) => { return Promise.reject(error) },
   afterInitFn: null, //(instance) => {},
-  responseWrap: {
-    dataKey: 'data',
-    statusKey: 'status',
-    fn: null, //(instance) => {},
-  },
+  isResponseWrap: true,
+  responseWrapper: null,/* {
+   dataKey: 'data',
+   statusKey: 'status',
+   fn: null, //(instance) => {},
+   }*/
 
 }
 

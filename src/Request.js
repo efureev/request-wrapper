@@ -1,6 +1,14 @@
 import axios from 'axios'
 import defaults from './defaults'
 import { isArray, isFunction } from '@feugene/mu/src/is'
+import defaultResponseWrapper from './interceptors/response/WrapperInterceptor'
+
+const buildResponseWrapper = (config) => {
+  return isFunction(config.responseWrapper)
+    ? (config.responseWrapper)(config)
+    : defaultResponseWrapper(config.responseWrapper || {})
+
+}
 
 export default class Request {
   constructor(config = {}) {
@@ -17,8 +25,12 @@ export default class Request {
   }
 
   init() {
-    if (isFunction(this.config.responseWrap.fn)) {
-      (this.config.responseWrap.fn)(this)
+    if (this.config.isResponseWrap) {
+      this.config.responseWrapper = buildResponseWrapper(this.config)
+
+      if (isFunction(this.config.responseWrapper?.fn)) {
+        (this.config.responseWrapper.fn)(this)
+      }
     }
 
     if (isFunction(this.config.afterInitFn)) {

@@ -1,6 +1,6 @@
 import { forEach } from '@feugene/mu/src'
 import { select } from '@feugene/mu/src/object'
-import { isArray, isBlob, isEmpty, isObject } from '@feugene/mu/src/is'
+import { isArray, isBlob, isEmpty, isObject, isString } from '@feugene/mu/src/is'
 import { buildAction } from './actions'
 
 /**
@@ -14,8 +14,8 @@ export default class ResponseWrapper {
     this.options = { ...options }
 
     this.datas = {
-      data: {},
-      extra: {},
+      data: null,
+      extra: null,
     }
 
     this.action = null
@@ -26,10 +26,22 @@ export default class ResponseWrapper {
   setResponse(response) {
     this.response = response
 
-    return this.setData().setExtraData().setMessageData().setAction()
+    this.setData()
+
+    if (!this.isContent()) {
+      this.setExtraData().setMessageData().setAction()
+    }
+
+    return this
   }
 
   setData() {
+    if (isString(this.response.data)) {
+      this.datas.data = this.response.data
+      this.type = 'content'
+      return
+    }
+
     const data = !isEmpty(this.options.dataKey) ? this.response.data[this.options.dataKey] : this.response.data
 
     if (isObject(data)) {
@@ -65,7 +77,7 @@ export default class ResponseWrapper {
   }
 
   setMessageData(message = null) {
-    if (this.type !== 'blob') {
+    if (!this.isBinary()) {
       this.message = message === null ? this.response.data.message : message
     }
 
@@ -73,7 +85,7 @@ export default class ResponseWrapper {
   }
 
   setAction() {
-    if (this.type !== 'blob') {
+    if (!this.isBinary()) {
       this.action = buildAction(this.extra(this.options.statusKey))
     } else {
       this.action = buildAction({ type: 'blob' })
@@ -101,6 +113,9 @@ export default class ResponseWrapper {
    * @return {*}
    */
   data(parameter = null) {
+    if (this.isContent()) {
+      return this.datas.data
+    }
     return this.get(`data${parameter ? `.${parameter}` : ''}`)
   }
 
@@ -111,6 +126,9 @@ export default class ResponseWrapper {
    * @return {*}
    */
   extra(parameter = null) {
+    if (this.isContent()) {
+      return this.datas.extra
+    }
     return this.get(`extra${parameter ? `.${parameter}` : ''}`)
   }
 
@@ -120,5 +138,13 @@ export default class ResponseWrapper {
     }
 
     this.action.run(axiosConfig, response)
+  }
+
+  isContent() {
+    return this.type === 'content'
+  }
+
+  isBinary() {
+    return this.type === 'blob'
   }
 }

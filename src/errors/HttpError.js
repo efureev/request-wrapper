@@ -1,22 +1,5 @@
 import statusMessage from '../statuses'
 import { select } from '@feugene/mu/src/object'
-/*
- function getResponseErrorMessage(error) {
- if (error.response && error.response.data) {
- return error.response.data.message
- }
-
- if (error.response && error.response.statusText) {
- return error.response.statusText
- }
-
- if (error.message) {
- return error.message
- }
-
- return '_getResponseErrorMessage can\'t handle error'
- }
- */
 
 /**
  * Create instant, which represent error object

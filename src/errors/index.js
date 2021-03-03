@@ -14,3 +14,5 @@ export default function make(error) {
       return new HttpError(error)
   }
 }
+
+export { ConflictError, ValidationError, HttpError }

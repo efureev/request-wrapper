@@ -1,5 +1,5 @@
+import makeError from '@/errors'
 import ResponseWrapper from './ResponseWrapper'
-import makeError from './errors'
 import { isFunction } from '@feugene/mu/src/is'
 
 const WrapperInterceptor = options => [

@@ -15,7 +15,7 @@ export default class ResponseWrapper {
 
     this.datas = {
       data: null,
-      extra: null,
+      extra: {},
     }
 
     this.action = null

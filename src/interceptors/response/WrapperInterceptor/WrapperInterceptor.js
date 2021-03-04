@@ -1,4 +1,4 @@
-import makeError from '@/errors'
+import makeError from '../../../errors'
 import ResponseWrapper from './ResponseWrapper'
 import { isFunction } from '@feugene/mu/src/is'
 

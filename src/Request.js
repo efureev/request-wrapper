@@ -16,6 +16,7 @@ export default class Request {
 
     this.axios = axios.create(this.config)
     this.axios.wrapper = this
+    this.axios.reconfigurate = this.reconfigure
 
     if (this.config.enabledCORS) {
       this.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
@@ -72,5 +73,11 @@ export default class Request {
 
   registerResponseInterceptors(...source) {
     this.registerInterceptors(this.axios.interceptors.response, ...source)
+  }
+
+  reconfigure(fn) {
+    if (isFunction(fn)) {
+      fn(this)
+    }
   }
 }

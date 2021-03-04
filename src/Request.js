@@ -5,52 +5,64 @@ import defaultResponseWrapper from './interceptors/response/WrapperInterceptor'
 
 const buildResponseWrapper = (config) => {
   return isFunction(config.responseWrapper)
-    ? (config.responseWrapper)(config)
+    ? config.responseWrapper(config)
     : defaultResponseWrapper(config.responseWrapper || {})
+}
 
+function buildAxios(instance) {
+  instance.axios = axios.create(instance.config)
+  instance.axios.wrapper = instance
+  instance.axios.reconfigure = instance.buildReconfigureFn(instance)
+}
+
+function buildConfig(config, instance) {
+  if (config.isResponseWrap) {
+    config.responseWrapper = buildResponseWrapper(config)
+
+    if (isFunction(config.responseWrapper.fn)) {
+      config.responseWrapper.fn(instance)
+    }
+  } else {
+    config.responseWrapper = null
+  }
+}
+
+const defaultBuilder = (instance) => {
+  buildAxios(instance)
+  buildConfig(instance.config, instance)
+
+  if (instance.config.enabledCORS) {
+    instance.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+  }
+
+  return instance.axios
 }
 
 export default class Request {
   constructor(config = {}) {
+    this.builder = defaultBuilder
     this.config = { ...defaults, ...config }
+    this.afterInitFns = []
 
-    this.buildAxios()
+    return this.build(this)
+  }
 
-    if (this.config.enabledCORS) {
-      this.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+  build() {
+    if (isFunction(this.config.builder)) {
+      this.builder = this.config.builder
+      delete this.config.builder
     }
 
-    this.init()
-
-    return this.axios
+    return this.builder(this)
   }
 
-  buildAxios() {
-    this.axios = axios.create(this.config)
-    this.axios.wrapper = this
-    this.axios.reconfigurate = this.reconfigure
-  }
-
-  init() {
-    if (this.config.isResponseWrap) {
-      this.config.responseWrapper = buildResponseWrapper(this.config)
-
-      if (isFunction(this.config.responseWrapper?.fn)) {
-        (this.config.responseWrapper.fn)(this)
+  buildReconfigureFn(instance) {
+    return function reconfigure(fn) {
+      if (isFunction(fn)) {
+        fn(instance)
+        instance.build()
       }
-    }
-
-    if (isFunction(this.config.afterInitFn)) {
-      (this.config.afterInitFn)(this)
-    }
-
-    return this
-  }
-
-  reconfigure(fn) {
-    if (isFunction(fn)) {
-      fn(this)
-      this.buildAxios()
+      return instance.axios
     }
   }
 
@@ -61,10 +73,10 @@ export default class Request {
 
     if (isArray(cb) && cb.length > 1) {
       successCb = cb[0]
-      errorCb = isFunction(cb[1]) ? cb[1] : error => Promise.reject(error)
+      errorCb = isFunction(cb[1]) ? cb[1] : (error) => Promise.reject(error)
     } else {
       successCb = cb
-      errorCb = error => Promise.reject(error)
+      errorCb = (error) => Promise.reject(error)
     }
 
     return [successCb, errorCb]
@@ -75,7 +87,7 @@ export default class Request {
    * @param source
    */
   registerInterceptors(target, ...source) {
-    source.forEach(callback => {
+    source.forEach((callback) => {
       target.use(...this.normalizeInterceptors(callback))
     })
   }

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import isFunction from '@feugene/mu/src/is/isFunction'
 
-const ActionInterceptor = options => response => {
+const ActionInterceptor = (options) => (response) => {
   const { action } = response
 
   if (action && isFunction(response.runAction)) {

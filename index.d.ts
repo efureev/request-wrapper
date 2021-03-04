@@ -1,17 +1,18 @@
 import { AxiosInterceptorManager, AxiosRequestConfig } from 'axios'
 
 export interface RequestConfig {
-  baseURL?: string;
-  timeout?: number;
-  headers?: object;
-  enabledCORS?: boolean;
-  onThrowErrorFn?: () => object;
-  responseWrap?: {
+  baseURL?: string,
+  timeout?: number,
+  headers?: object,
+  enabledCORS?: boolean,
+  onThrowErrorFn?: () => object,
+  isResponseWrap: boolean,
+  responseWrapper?: {
     dataKey?: string,
     statusKey?: string,
     fn: ((instance) => object) | null,
   },
-  afterInitFn?: () => object;
+  afterInitFn?: () => object,
 }
 
 

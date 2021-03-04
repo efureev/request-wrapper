@@ -1,4 +1,4 @@
-const AuthInterceptor = options => config => {
+const AuthInterceptor = (options) => (config) => {
   if (options.auth) {
     config.headers.Authorization = options.auth
   } else {

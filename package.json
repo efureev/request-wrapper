@@ -1,6 +1,6 @@
 {
   "name": "@feugene/request",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Request wrapper",
   "main": "dist/index.js",
   "keywords": [
@@ -9,22 +9,31 @@
   "license": "MIT",
   "homepage": "https://github.com/efureev",
   "scripts": {
-    "code-format": "prettier --config ./.prettierrc.js --write src/**/*.{js,vue}",
+    "code-format": "prettier --config ./.prettierrc.js --write ./src/**/*.{js,vue}",
     "lint": "eslint --fix ./src/**/*",
-    "prettier": "prettier --write src/**/*"
+    "prettier": "prettier --write ./src/** ./tests/**",
+    "test": "mocha -r esm -r @babel/register --reporter=landing tests"
   },
   "devDependencies": {
-    "eslint": "7.20.0",
-    "eslint-config-prettier": "^8.0.0",
+    "@babel/core": "^7.12.16",
+    "@babel/register": "^7.13.8",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.13",
+    "@babel/plugin-proposal-optional-chaining": "^7.13.8",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/preset-env": "^7.13.9",
+    "eslint": "7.21.0",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-sonarjs": "^0.6.0",
     "eslint-plugin-unicorn": "^28.0.2",
+    "mocha": "^8.3.0",
+    "esm": "3.2.25",
     "prettier": "^2.2.1"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "@feugene/mu": "^2.20.0"
+    "@feugene/mu": "^2.20.1",
+    "axios": "^0.21.1"
   },
   "typings": "./index.d.ts"
 }

@@ -14,15 +14,21 @@ export default class Request {
   constructor(config = {}) {
     this.config = { ...defaults, ...config }
 
-    this.axios = axios.create(this.config)
-    this.axios.wrapper = this
-    this.axios.reconfigurate = this.reconfigure
+    this.buildAxios()
 
     if (this.config.enabledCORS) {
       this.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
     }
 
-    return this.init()
+    this.init()
+
+    return this.axios
+  }
+
+  buildAxios() {
+    this.axios = axios.create(this.config)
+    this.axios.wrapper = this
+    this.axios.reconfigurate = this.reconfigure
   }
 
   init() {
@@ -38,7 +44,14 @@ export default class Request {
       (this.config.afterInitFn)(this)
     }
 
-    return this.axios
+    return this
+  }
+
+  reconfigure(fn) {
+    if (isFunction(fn)) {
+      fn(this)
+      this.buildAxios()
+    }
   }
 
   normalizeInterceptors(callback) {
@@ -73,11 +86,5 @@ export default class Request {
 
   registerResponseInterceptors(...source) {
     this.registerInterceptors(this.axios.interceptors.response, ...source)
-  }
-
-  reconfigure(fn) {
-    if (isFunction(fn)) {
-      fn(this)
-    }
   }
 }

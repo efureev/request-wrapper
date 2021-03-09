@@ -11,6 +11,12 @@ describe('create request by default', () => {
     it('same instance', () => {
       assert.strictEqual(true, request.wrapper instanceof Request)
       assert.strictEqual(true, isObject(request.wrapper.config))
+
+      assert.strictEqual(true, isObject(request.wrapper.interceptors))
+      assert.strictEqual(true, isArray(request.wrapper.interceptors.request))
+      assert.strictEqual(true, isArray(request.wrapper.interceptors.response))
+      assert.strictEqual(true, isEmpty(request.wrapper.interceptors.request))
+      assert.strictEqual(true, request.wrapper.interceptors.response.length === 1)
     })
 
     it('same config', () => {
@@ -31,7 +37,7 @@ describe('create request by default', () => {
 
     it('same config', () => {
       console.log(request.interceptors.response)
-      assert.strictEqual(true, isEmpty(request.interceptors.response.handlers))
+      assert.strictEqual(false, isEmpty(request.interceptors.response.handlers))
       assert.strictEqual(true, isEmpty(request.interceptors.request.handlers))
     })
   })

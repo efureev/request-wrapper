@@ -20,9 +20,8 @@ export const customRequest = (config = {}) => {
 }
 
 describe('create request with base custom config', () => {
-  const request = customRequest({ timeout: 60000 })
-
   describe('checking Request', () => {
+    const request = customRequest({ timeout: 60000 })
     it('same instance', () => {
       assert.strictEqual(true, request.wrapper instanceof Request)
       assert.strictEqual(true, isObject(request.wrapper.config))
@@ -31,7 +30,7 @@ describe('create request with base custom config', () => {
       assert.strictEqual(true, isArray(request.wrapper.interceptors.request))
       assert.strictEqual(true, isArray(request.wrapper.interceptors.response))
       assert.strictEqual(true, isEmpty(request.wrapper.interceptors.request))
-      assert.strictEqual(true, request.wrapper.interceptors.response.length===1)
+      assert.strictEqual(true, request.wrapper.interceptors.response.length === 1)
     })
 
     it('same config', () => {
@@ -47,12 +46,13 @@ describe('create request with base custom config', () => {
   })
 
   describe('checking Axios', () => {
+    const request = customRequest({ timeout: 60000 })
     it('same instance', () => {
       assert.strictEqual(true, isFunction(request))
     })
 
     it('same config', () => {
-      assert.strictEqual(true, isEmpty(request.interceptors.response.handlers))
+      assert.strictEqual(false, isEmpty(request.interceptors.response.handlers))
       assert.strictEqual(true, isEmpty(request.interceptors.request.handlers))
     })
   })

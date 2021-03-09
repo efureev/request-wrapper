@@ -56,7 +56,10 @@ export default class Request {
     this.builder = defaultBuilder
     this.config = { ...defaults, ...config }
 
-    return this.build(this)
+    this.build(this)
+    this.applyInterceptors()
+
+    return this.axios
   }
 
   build() {
@@ -65,7 +68,7 @@ export default class Request {
       delete this.config.builder
     }
 
-    return this.builder(this)
+    this.builder(this)
   }
 
   buildReconfigureFn(instance) {

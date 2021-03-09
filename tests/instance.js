@@ -19,8 +19,6 @@ describe('create request by default', () => {
       assert.strictEqual(10000, config.timeout)
       assert.strictEqual(true, isObject(config.headers))
       assert.strictEqual(true, equal({}, config.headers))
-      assert.strictEqual(true, isArray(config.afterInitFns))
-      assert.strictEqual(true, isEmpty(config.afterInitFns))
       assert.strictEqual(true, config.isResponseWrap)
       assert.strictEqual(true, isObject(config.responseWrapper))
     })
@@ -32,8 +30,8 @@ describe('create request by default', () => {
     })
 
     it('same config', () => {
-      // console.log(request.interceptors.response)
-      assert.strictEqual(false, isEmpty(request.interceptors.response.handlers))
+      console.log(request.interceptors.response)
+      assert.strictEqual(true, isEmpty(request.interceptors.response.handlers))
       assert.strictEqual(true, isEmpty(request.interceptors.request.handlers))
     })
   })
@@ -54,8 +52,6 @@ describe('create request without response wrapper', () => {
       assert.strictEqual(10000, config.timeout)
       assert.strictEqual(true, isObject(config.headers))
       assert.strictEqual(true, equal({}, config.headers))
-      assert.strictEqual(true, isArray(config.afterInitFns))
-      assert.strictEqual(true, isEmpty(config.afterInitFns))
       assert.strictEqual(false, config.isResponseWrap)
       assert.strictEqual(true, isNull(config.responseWrapper))
     })

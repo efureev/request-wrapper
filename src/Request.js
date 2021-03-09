@@ -20,13 +20,21 @@ function buildConfig(config, instance) {
     config.responseWrapper = buildResponseWrapper(config)
 
     if (isFunction(config.responseWrapper.fn)) {
-      config.responseWrapper.fn(instance)
+      if (!instance.fillWrapperer) {
+        config.responseWrapper.fn(instance)
+        instance.fillWrapperer = true
+      }
     }
   } else {
     config.responseWrapper = null
+    instance.fillWrapperer = false
   }
 }
 
+/**
+ * @param {Request} instance
+ * @return {AxiosInstance}
+ */
 const defaultBuilder = (instance) => {
   buildAxios(instance)
   buildConfig(instance.config, instance)
@@ -40,9 +48,13 @@ const defaultBuilder = (instance) => {
 
 export default class Request {
   constructor(config = {}) {
+    this.interceptors = {
+      request: [],
+      response: [],
+    }
+
     this.builder = defaultBuilder
     this.config = { ...defaults, ...config }
-    this.afterInitFns = []
 
     return this.build(this)
   }
@@ -61,7 +73,10 @@ export default class Request {
       if (isFunction(fn)) {
         fn(instance)
         instance.build()
+
+        instance.applyInterceptors()
       }
+
       return instance.axios
     }
   }
@@ -92,11 +107,24 @@ export default class Request {
     })
   }
 
+  applyInterceptors() {
+    this.registerInterceptors(this.axios.interceptors.request, ...this.interceptors.request)
+    this.registerInterceptors(this.axios.interceptors.response, ...this.interceptors.response)
+  }
+
+  addInterceptors(selfTarget, ...source) {
+    source.forEach((callback) => {
+      selfTarget.push(callback)
+    })
+  }
+
   registerRequestInterceptors(...source) {
-    this.registerInterceptors(this.axios.interceptors.request, ...source)
+    this.addInterceptors(this.interceptors.request, ...source)
+    // this.registerInterceptors(this.axios.interceptors.request, ...source)
   }
 
   registerResponseInterceptors(...source) {
-    this.registerInterceptors(this.axios.interceptors.response, ...source)
+    this.addInterceptors(this.interceptors.response, ...source)
+    // this.registerInterceptors(this.axios.interceptors.response, ...source)
   }
 }

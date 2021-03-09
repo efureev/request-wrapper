@@ -26,6 +26,12 @@ describe('create request with base custom config', () => {
     it('same instance', () => {
       assert.strictEqual(true, request.wrapper instanceof Request)
       assert.strictEqual(true, isObject(request.wrapper.config))
+
+      assert.strictEqual(true, isObject(request.wrapper.interceptors))
+      assert.strictEqual(true, isArray(request.wrapper.interceptors.request))
+      assert.strictEqual(true, isArray(request.wrapper.interceptors.response))
+      assert.strictEqual(true, isEmpty(request.wrapper.interceptors.request))
+      assert.strictEqual(true, request.wrapper.interceptors.response.length===1)
     })
 
     it('same config', () => {
@@ -35,8 +41,6 @@ describe('create request with base custom config', () => {
       assert.strictEqual(true, isObject(config.headers))
       assert.strictEqual(2, Object.keys(config.headers).length)
       assert.strictEqual('test@example.com', config.headers['X-Debug-User'])
-      assert.strictEqual(true, isArray(config.afterInitFns))
-      assert.strictEqual(true, isEmpty(config.afterInitFns))
       assert.strictEqual(true, config.isResponseWrap)
       assert.strictEqual(true, isObject(config.responseWrapper))
     })
@@ -48,8 +52,7 @@ describe('create request with base custom config', () => {
     })
 
     it('same config', () => {
-      // console.log(request.interceptors.response)
-      assert.strictEqual(false, isEmpty(request.interceptors.response.handlers))
+      assert.strictEqual(true, isEmpty(request.interceptors.response.handlers))
       assert.strictEqual(true, isEmpty(request.interceptors.request.handlers))
     })
   })

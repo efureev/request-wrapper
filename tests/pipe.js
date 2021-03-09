@@ -19,7 +19,7 @@ const customRequest = (axiosInstance) => {
     (instance) => {
       instance.config.baseURL += '/module'
       instance.config.headers['X-Key'] = 'test'
-    }
+    },
   )
 }
 
@@ -30,7 +30,7 @@ const customRequest2 = (axiosInstance) => {
      */
     (instance) => {
       instance.config.isResponseWrap = false
-    }
+    },
   )
 }
 
@@ -38,6 +38,13 @@ describe('create request with custom config and wrapper', () => {
   it('same instance', () => {
     assert.strictEqual(true, baseRequest.wrapper instanceof Request)
     assert.strictEqual(true, isObject(baseRequest.wrapper.config))
+
+    assert.strictEqual(true, isObject(baseRequest.wrapper.interceptors))
+    assert.strictEqual(true, isArray(baseRequest.wrapper.interceptors.request))
+    assert.strictEqual(true, isArray(baseRequest.wrapper.interceptors.response))
+
+    assert.strictEqual(true, isEmpty(baseRequest.wrapper.interceptors.request))
+    assert.strictEqual(true, baseRequest.wrapper.interceptors.response.length === 1)
   })
 
   const request = customRequest(baseRequest)
@@ -56,8 +63,6 @@ describe('create request with custom config and wrapper', () => {
       assert.strictEqual(3, Object.keys(config.headers).length)
       assert.strictEqual('test@example.com', config.headers['X-Debug-User'])
       assert.strictEqual('test', config.headers['X-Key'])
-      assert.strictEqual(true, isArray(config.afterInitFns))
-      assert.strictEqual(true, isEmpty(config.afterInitFns))
       assert.strictEqual(true, config.isResponseWrap)
       assert.strictEqual(true, isObject(config.responseWrapper))
     })
@@ -86,7 +91,7 @@ describe('create request with custom config and wrapper', () => {
     })
 
     it('same config', () => {
-      assert.strictEqual(true, isEmpty(request2.interceptors.response.handlers))
+      assert.strictEqual(false, isEmpty(request2.interceptors.response.handlers))
       assert.strictEqual(true, isEmpty(request2.interceptors.request.handlers))
     })
   })

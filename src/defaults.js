@@ -7,12 +7,12 @@ const defaultConfig = {
   headers: {},
   onThrowErrorFn: null, // (error, instance) => { return Promise.reject(error) },
   // afterInitFn: null, //(instance) => {},
-  addAfterInitFn: (fn) => {
+  /*addAfterInitFn: (fn) => {
     if (isFunction(fn)) {
       this.afterInitFns.push(fn)
     }
   },
-  afterInitFns: [],
+  afterInitFns: [],*/
   isResponseWrap: true,
   responseWrapper: null /* {
    dataKey: 'data',

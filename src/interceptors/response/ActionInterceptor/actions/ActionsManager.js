@@ -4,7 +4,7 @@ class ActionsManager {
   }
 
   add(type, action) {
-    this.list = action
+    this.list[type] = action
   }
 
   get(type) {

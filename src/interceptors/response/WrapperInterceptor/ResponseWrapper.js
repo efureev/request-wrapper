@@ -1,7 +1,7 @@
 import { forEach } from '@feugene/mu/src'
 import { select } from '@feugene/mu/src/object'
 import { isArray, isBlob, isEmpty, isObject, isString } from '@feugene/mu/src/is'
-import { buildAction } from './actions'
+// import { buildAction } from './actions'
 
 /**
  * Create instance, which represent response object
@@ -18,7 +18,7 @@ export default class ResponseWrapper {
       extra: {},
     }
 
-    this.action = null
+    // this.action = null
 
     this.setResponse(axiosResponse)
   }
@@ -29,7 +29,7 @@ export default class ResponseWrapper {
     this.setData()
 
     if (!this.isContent()) {
-      this.setExtraData().setMessageData().setAction()
+      this.setExtraData().setMessageData()//.setAction()
     }
 
     return this
@@ -84,7 +84,7 @@ export default class ResponseWrapper {
     return this
   }
 
-  setAction() {
+  /*setAction() {
     if (!this.isBinary()) {
       this.action = buildAction(this.extra(this.options.statusKey))
     } else {
@@ -92,7 +92,7 @@ export default class ResponseWrapper {
     }
 
     return this
-  }
+  }*/
 
   /**
    * @example resp.get('response.data')
@@ -132,13 +132,13 @@ export default class ResponseWrapper {
     return this.get(`extra${parameter ? `.${parameter}` : ''}`)
   }
 
-  runAction(axiosConfig, response) {
+  /*runAction(axiosConfig, response) {
     if (!this.action) {
       return
     }
 
     this.action.run(axiosConfig, response)
-  }
+  }*/
 
   isContent() {
     return this.type === 'content'

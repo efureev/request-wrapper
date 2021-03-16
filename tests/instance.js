@@ -36,7 +36,6 @@ describe('create request by default', () => {
     })
 
     it('same config', () => {
-      console.log(request.interceptors.response)
       assert.strictEqual(false, isEmpty(request.interceptors.response.handlers))
       assert.strictEqual(true, isEmpty(request.interceptors.request.handlers))
     })

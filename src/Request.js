@@ -43,6 +43,10 @@ const defaultBuilder = (instance) => {
     instance.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
   }
 
+  if (isFunction(instance.config.afterBuilding)) {
+    (instance.config.afterBuilding)(instance)
+  }
+
   return instance.axios
 }
 
@@ -123,11 +127,9 @@ export default class Request {
 
   registerRequestInterceptors(...source) {
     this.addInterceptors(this.interceptors.request, ...source)
-    // this.registerInterceptors(this.axios.interceptors.request, ...source)
   }
 
   registerResponseInterceptors(...source) {
     this.addInterceptors(this.interceptors.response, ...source)
-    // this.registerInterceptors(this.axios.interceptors.response, ...source)
   }
 }
